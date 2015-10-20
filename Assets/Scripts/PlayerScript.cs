@@ -27,6 +27,8 @@ public class PlayerScript : MonoBehaviour {
 
     private bool attacking;
 
+	public GameObject projectile;
+
     // Use this for initialization
     void Start () {
 		//Debug.Log("Hello", gameObject);
@@ -97,6 +99,10 @@ public class PlayerScript : MonoBehaviour {
             anim.SetBool("idle", false);
             anim.SetBool("attack_right", true);
             anim.Play("link_sword_right");
+
+			Vector3 startPos = transform.position;
+			startPos.x += .4f;
+			GameObject octo = Instantiate(projectile, startPos, Quaternion.identity) as GameObject;
         }
 
         if (!attacking)
@@ -143,7 +149,7 @@ public class PlayerScript : MonoBehaviour {
 		if (other.name == "hurt") {
 			health--;
 			Debug.Log ("Ouch! heath now:" + health.ToString());
-		} else {
+		} if(other.name=="yellow_house") {
 			Debug.Log (other.name);
 			Application.LoadLevel ("scene1");
 		}
