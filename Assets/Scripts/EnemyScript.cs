@@ -7,7 +7,8 @@ public class EnemyScript : MonoBehaviour {
     public float speed = 0.01f;
     public float health = 3;
     private GameObject player;
-    private PlayerScript ps;
+    //private PlayerScript ps;
+    private PlayerGamepad ps;
     private bool invulnerable;
     private float invulCounter;
 
@@ -19,7 +20,8 @@ public class EnemyScript : MonoBehaviour {
         Debug.Log(invulCounter);
         anim = GetComponent<Animator>();
         player = GameObject.Find("Player");
-        ps = (PlayerScript)player.GetComponent(typeof(PlayerScript));
+        //ps = (PlayerScript)player.GetComponent(typeof(PlayerScript));
+        ps = (PlayerGamepad)player.GetComponent(typeof(PlayerGamepad));
 
     }
 

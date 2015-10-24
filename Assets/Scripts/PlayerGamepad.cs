@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PlayerScript1 : MonoBehaviour {
+public class PlayerGamepad : MonoBehaviour
+{
 
     public float speed = 0.05f;
     public string up = "w";
@@ -20,29 +21,30 @@ public class PlayerScript1 : MonoBehaviour {
 
     Animator anim;
 
-	private bool allowed_right;
-	private bool allowed_left;
-	private bool allowed_down;
-	private bool allowed_up;
+    private bool allowed_right;
+    private bool allowed_left;
+    private bool allowed_down;
+    private bool allowed_up;
 
     private bool attacking;
 
-	public GameObject projectile;
+    public GameObject projectile;
 
     // Use this for initialization
-    void Start () {
-		//Debug.Log("Hello", gameObject);
-		Debug.Log ("Starting health is: " + health.ToString());
+    void Start()
+    {
+        //Debug.Log("Hello", gameObject);
+        Debug.Log("Starting health is: " + health.ToString());
         anim = GetComponent<Animator>();
-		allowed_up = true;
-		allowed_down = true;
-		allowed_right = true;
-		allowed_left = true;
+        allowed_up = true;
+        allowed_down = true;
+        allowed_right = true;
+        allowed_left = true;
 
         attacking = false;
     }
 
-   public void releaseObject()
+    public void releaseObject()
     {
         allowed_up = true;
         allowed_down = true;
@@ -50,12 +52,14 @@ public class PlayerScript1 : MonoBehaviour {
         allowed_left = true;
     }
 
-    public bool getAttacking() {
+    public bool getAttacking()
+    {
         return attacking;
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update()
+    {
 
         anim.SetBool("idle", true);
         anim.SetBool("going_right", false);
@@ -70,7 +74,7 @@ public class PlayerScript1 : MonoBehaviour {
 
         attacking = false;
 
-        
+
 
         if (Input.GetKey(attack_up))
         {
@@ -100,9 +104,9 @@ public class PlayerScript1 : MonoBehaviour {
             anim.SetBool("attack_right", true);
             anim.Play("link_sword_right");
 
-			Vector3 startPos = transform.position;
-			startPos.x += .4f;
-			GameObject octo = Instantiate(projectile, startPos, Quaternion.identity) as GameObject;
+            //Vector3 startPos = transform.position;
+            //startPos.x += .4f;
+            //GameObject octo = Instantiate(projectile, startPos, Quaternion.identity) as GameObject;
         }
 
         if (!attacking)
@@ -144,27 +148,76 @@ public class PlayerScript1 : MonoBehaviour {
 
     }
 
-	void OnTriggerEnter2D(Collider2D other){
+    void OnTriggerEnter2D(Collider2D other)
+    {
 
-		if (other.name == "hurt") {
-			health--;
-			Debug.Log ("Ouch! heath now:" + health.ToString());
-		} if(other.name=="yellow_house") {
-			Debug.Log (other.name);
-			Application.LoadLevel ("scene1");
-		}
-	} 
-	void OnCollisionEnter2D(Collision2D other){
+        if (other.name == "hurt")
+        {
+            health--;
+            Debug.Log("Ouch! heath now:" + health.ToString());
+        }
+        if (other.name == "yellow_house")
+        {
+            Debug.Log(other.name);
+            Application.LoadLevel("side_yellow_house");
+        }
+        if (other.name == "sign!")
+        {
+            Debug.Log(other.name);
+            Application.LoadLevel("scene1");
+        }
+    }
+    void OnCollisionEnter2D(Collision2D other)
+    {
 
-	}
+        //Debug.Log("Player hit a wall");  
+        if (other.gameObject.tag != "enemy")
+        {
+            Debug.Log("not an enemy");
+            if (Input.GetKey(right))
+            {
+                allowed_right = false;
+            }
+            if (Input.GetKey(left))
+            {
+                allowed_left = false;
+            }
+            if (Input.GetKey(up))
+            {
+                allowed_up = false;
+            }
+            if (Input.GetKey(down))
+            {
+                allowed_down = false;
+            }
+        }
+        else
+        {
 
-	void OnCollisionStay2D(Collision2D other){
+            Debug.Log("ran into enemy");
+        }
+    }
 
-	}
-
-	void OnCollisionExit2D(Collision2D other){
-
-	}
+    void OnCollisionExit2D(Collision2D other)
+    {
+        //Debug.Log ("Leaving a wall");
+        if (!allowed_up)
+        {
+            allowed_up = true;
+        }
+        if (!allowed_down)
+        {
+            allowed_down = true;
+        }
+        if (!allowed_left)
+        {
+            allowed_left = true;
+        }
+        if (!allowed_right)
+        {
+            allowed_right = true;
+        }
+    }
 
 
 
